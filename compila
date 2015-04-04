@@ -1,0 +1,3 @@
+gcc ./common/dbAccess.c ./database/src/db.c
+
+ 
