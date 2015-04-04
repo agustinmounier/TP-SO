@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "client.h"
+#include "../common.h"
 
 int
 main(void){
