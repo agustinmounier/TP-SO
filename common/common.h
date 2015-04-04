@@ -1,14 +1,14 @@
 #ifndef _common_
 #define _common_
 
+#include "../database/src/db.h"
 #define CANT_COMMANDS 1
 
-char *commands[] = { "showmovies" };
 
 void execute_input(char * input);
 
 void show_movies();
 
-int get_movies();
+void get_movies(Movie * moviesRead);
 
 #endif

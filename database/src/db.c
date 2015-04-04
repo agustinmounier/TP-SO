@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "db.h"
 #include "../../common/common.h"
 
@@ -7,16 +8,25 @@ int
 main(void){
 
 	Movie movies[CANT_MOVIES] = {
-		{1, "Hangover"},
-		{2, "Pulp Fiction"},
-		{3, "Inception"}, 
-		{4, "Fast and Furious 7"},
-		{5, "Crank"}
+		{"01", "Hangover"},
+		{"02", "Pulp Fiction"},
+		{"03", "Inception"}, 
+		{"04", "Fast and Furious 7"},
+		{"05", "Crank"}
 	};
 
-	FILE * file = fopen(MOVIES_PATH, "wb");
+	Movie moviesRead[CANT_MOVIES];
+	char times[5][5] = {"900", "1300", "1500", "1800", "2100"};
+
+	int i = 0;
+	int j = 0;
+	int seats = 40;
+	char moviePath[30];
+	char movieID[20];
+
+	FILE * file = fopen(MOVIES_PATH, "wb+");
 	if ( file == NULL ){
-            printf("error while creating movie_list file\n");
+            printf("error while creating movie_list file fdsafdsa\n");
             return 0;
     }
 
@@ -25,9 +35,27 @@ main(void){
             return 0;
 	}
 	fclose(file);
+	get_movies(moviesRead);
 
-	get_movies();
-	
+	for(; i < CANT_MOVIES; i++){
+		for(j = 0; j < CANT_TIMES; j++){
+
+
+			strcpy(movieID, movies[i].id);
+            strcat(movieID, "-");
+            strcat(movieID, times[j]);
+
+			sprintf(moviePath, MOVIE_PATH, movieID);
+
+			file = fopen(moviePath, "wb");
+			fwrite(&seats, sizeof(int), 1, file);
+			fclose(file);
+		}
+		
+	}
+
+
+
     printf("abrio.\n");
 
     return 0;
