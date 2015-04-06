@@ -16,7 +16,7 @@ main(void){
 	};
 
 	Movie moviesRead[CANT_MOVIES];
-	char times[5][5] = {"900", "1300", "1500", "1800", "2100"};
+	
 
 	int i = 0;
 	int j = 0;
