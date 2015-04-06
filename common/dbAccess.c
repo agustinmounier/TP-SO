@@ -70,6 +70,8 @@ reserve_seat(char* id, char* time, int n){
 	}
 	
 	seats=seats-n;
+	printf("seats: %d\n", seats);
+	fseek(file, 0, SEEK_SET);
 	fwrite(&seats, sizeof(int), 1, file);
 	unlockFile(fd);
 	fclose(file);
