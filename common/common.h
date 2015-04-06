@@ -13,6 +13,8 @@ void get_movies(Movie * moviesRead);
 
 int get_seats(char * id, char * time);
 
+void get_moviePath(char* moviePath,char* id, char* time);
+
 void reserve_seat( char* id, char* time, int n);
 
 int rdlockFile(int fd);

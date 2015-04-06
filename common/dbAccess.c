@@ -25,35 +25,43 @@ get_movies(Movie * moviesRead){
 	fclose(file);
 }
 
-int
-get_seats(char* id, char* time){
+void
+get_moviePath(char* moviePath,char* id, char* time){
+
 	char movieID[20];
-	FILE *file;
-	int seats;
-	char moviePath[40];
 	strcpy(movieID, id);
-    strcat(movieID, "-");
-    strcat(movieID, time);
+    	strcat(movieID, "-");
+    	strcat(movieID, time);
+
 	
 	sprintf(moviePath, MOVIE_PATH, movieID);
-
+}
+int
+get_seats(char* id, char* time){
+	FILE *file;
+	int seats,fd;
+	char moviePath[40];
+	
+	get_moviePath(moviePath,id,time);	
 	file=fopen(moviePath, "rb+");
+	fd=fileno(file);
+	if( rdlockFile(fd) == -1){
+		printf("Imposible realizar la reserva. Pruebe de nuevo en unos minutos.");
+		return;
+	}
 	fread(&seats, sizeof(int), 1, file);
+	unlockFile(fd);
 	fclose(file);
 	return seats;
 }
 
 void
 reserve_seat(char* id, char* time, int n){
-	char movieID[20];
 	FILE * file;
-	char moviePath[40];
 	int seats, fd;
-	strcpy(movieID, id);
-    strcat(movieID, "-");
-    strcat(movieID, time);
-	
-	sprintf(moviePath, MOVIE_PATH, movieID);
+	char moviePath[40];
+	get_moviePath(moviePath,id,time);
+
 	
 	file=fopen(moviePath, "rb+");
 	fd=fileno(file);
