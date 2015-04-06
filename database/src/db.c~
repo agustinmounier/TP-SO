@@ -58,7 +58,7 @@ main(void){
 
     printf("abrio.\n");
 	printf("%d\n",get_seats("01", "900"));
-	reserve_seat("01", "900", 10);
+	reserve_seats("01", "900", 10);
 	printf("%d\n",get_seats("01", "900"));
 
     return 0;
