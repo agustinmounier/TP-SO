@@ -15,6 +15,9 @@ main(void){
 		{"05", "Crank"}
 	};
 
+	char times[5][5]={"0900", "1200", "1700", "2100", "0100"};
+	char times2[5][5];
+
 	Movie moviesRead[CANT_MOVIES];
 	
 
@@ -25,6 +28,8 @@ main(void){
 	char movieID[20];
 
 	FILE * file = fopen(MOVIES_PATH, "wb+");
+	FILE * file2 = fopen(TIMES, "wb+");
+	
 	if ( file == NULL ){
             printf("error while creating movie_list file fdsafdsa\n");
             return 0;
@@ -35,7 +40,21 @@ main(void){
             return 0;
 	}
 	fclose(file);
+
+	if ( file2 == NULL ){
+            printf("error while creating times file\n");
+            return 0;
+    }
+
+	if( fwrite(times, 5, CANT_TIMES, file2) != CANT_TIMES){
+            printf("Error while writing times file\n");
+            return 0;
+	}
+	fclose(file2);
+
 	get_movies(moviesRead);
+	get_times(times2);
+	printf("%d\n", getCantMovies());
 
 	for(; i < CANT_MOVIES; i++){
 		for(j = 0; j < CANT_TIMES; j++){
