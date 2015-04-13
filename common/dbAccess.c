@@ -42,7 +42,6 @@ get_seats(char* id, char* time){
 	FILE *file;
 	int seats,fd;
 	char moviePath[40];
-	
 	get_moviePath(moviePath,id,time);	
 	file=fopen(moviePath, "rb+");
 	fd=fileno(file);
@@ -68,13 +67,13 @@ reserve_seat(char* id, char* time, int n){
 	fd=fileno(file);
 
 	if( wrlockFile(fd) == -1){
-		printf("Imposible realizar la reserva. Pruebe de nuevo en unos minutos.");
+		printf("It was not possible to make the reservation. Try again later.\n");
 		return;
 	}
 	fread(&seats, sizeof(int), 1, file);
 
 	if( seats < n ){
-		printf("No hay asientos disponibles");
+		printf("Sorry, no seats available.\n");
 		return;
 	}
 	
@@ -84,7 +83,7 @@ reserve_seat(char* id, char* time, int n){
 	fwrite(&seats, sizeof(int), 1, file);
 	unlockFile(fd);
 	fclose(file);
-	printf("Reserva exitosa");
+	printf("The seats have been successfully reserved.\n");
 	return;
 }
 
