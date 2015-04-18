@@ -12,7 +12,12 @@ main(void){
 		{"02", "Pulp Fiction"},
 		{"03", "Inception"}, 
 		{"04", "Fast and Furious 7"},
-		{"05", "Crank"}
+		{"05", "Crank"},
+		{"06", "The day after tomorrow"},
+		{"07", "Ocean 13"},
+		{"08", "Atlantis"},
+		{"09", "Big Eyes"},
+		{"10", "Home"}
 	};
 
 	char times[5][5]={"0900", "1200", "1700", "2100", "0100"};
@@ -52,10 +57,6 @@ main(void){
 	}
 	fclose(file2);
 
-	get_movies(moviesRead);
-	get_times(times2);
-	printf("%d\n", getCantMovies());
-
 	for(; i < CANT_MOVIES; i++){
 		for(j = 0; j < CANT_TIMES; j++){
 
@@ -72,13 +73,6 @@ main(void){
 		}
 		
 	}
-
-	
-
-    printf("abrio.\n");
-	printf("%d\n",get_seats("01", "900"));
-	reserve_seat("01", "900", 10);
-	printf("%d\n",get_seats("01", "900"));
 
     return 0;
 }

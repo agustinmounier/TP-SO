@@ -1,0 +1,1 @@
+gcc ./database/src/db.c 

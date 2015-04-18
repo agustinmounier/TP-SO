@@ -22,7 +22,7 @@ execute_input(char * input){
 	char times[5];
 	int i;
 	int cant;
-	for(i=0; i<15 && input[i]!= '\0' && input[i]!=' ';i++){
+	for(i=0; i<15 && input[i]!= '\0' && input[i]!=' ' && input[i]!= '\n';i++){
 		cmd[i]=input[i];
 	}
 	if(strcmp(cmd, "showmovies")==0){
@@ -93,16 +93,14 @@ execute_input(char * input){
 
 void
 show_movies(){
-	int movies=getCantMovies();
-	Movie movielist[movies];
+	List_Movies list;
 	char times[5][5];
 	int i=0;
-
-	get_movies(movielist, movies);
+	list=get_movies();
 	get_times(times);
 	
-	for(; i<movies; i++){
-		printf("%s - %s\n", movielist[i].id, movielist[i].name);
+	for(; i<CANT_MOVIES; i++){
+		printf("%s - %s\n", list.movies_list[i].id, list.movies_list[i].name);
 	}
 	printf("Available times:\n");
 	for(i=0; i<5; i++){

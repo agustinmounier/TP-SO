@@ -3,13 +3,18 @@
 
 #include "../database/src/db.h"
 #define CANT_COMMANDS 3
+#define CANT_MOVIES 10
 
+
+typedef struct{
+	Movie movies_list[CANT_MOVIES];
+}List_Movies;
 
 void execute_input(char * input);
 
 void show_movies();
 
-void get_movies(Movie * moviesRead, int movies);
+List_Movies get_movies();
 
 int get_seats(char * id, char * time);
 

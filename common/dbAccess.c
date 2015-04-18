@@ -7,23 +7,25 @@
 
 static struct flock fl = {.l_start = 0, .l_whence = SEEK_SET, .l_len = 0};
 
-void
-get_movies(Movie * moviesRead, int cantmovies){
+List_Movies
+get_movies(){
 	int fd;
+	List_Movies list;
 	FILE *file = fopen(MOVIES_PATH, "rb+");
     if( file == NULL ){
         printf("Invalid movie code: not found in database\n");
-        return ;
+        return list;
     }
 	fd=fileno(file);
 	if( rdlockFile(fd) == -1){
 		printf("Impossible to show movies.");
-		return;
+		return list;
 	}
 
-    fread(moviesRead, sizeof(Movie), cantmovies, file);
+    fread(list.movies_list, sizeof(Movie), CANT_MOVIES, file);
     unlockFile(fd);
 	fclose(file);
+	return list;
 }
 
 void
