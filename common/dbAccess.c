@@ -7,22 +7,25 @@
 
 static struct flock fl = {.l_start = 0, .l_whence = SEEK_SET, .l_len = 0};
 
-void
-get_movies(Movie * moviesRead){
-	int i = 0;
-
+List_Movies
+get_movies(){
+	int fd;
+	List_Movies list;
 	FILE *file = fopen(MOVIES_PATH, "rb+");
     if( file == NULL ){
         printf("Invalid movie code: not found in database\n");
-        return ;
+        return list;
     }
+	fd=fileno(file);
+	if( rdlockFile(fd) == -1){
+		printf("Impossible to show movies.");
+		return list;
+	}
 
-    fread(moviesRead, sizeof(Movie), CANT_MOVIES, file);
-
-    for(; i < CANT_MOVIES; i++){
-    	printf("%s\n", moviesRead[i].name);
-    }
+    fread(list.movies_list, sizeof(Movie), CANT_MOVIES, file);
+    unlockFile(fd);
 	fclose(file);
+	return list;
 }
 
 void
@@ -41,13 +44,12 @@ get_seats(char* id, char* time){
 	FILE *file;
 	int seats,fd;
 	char moviePath[40];
-	
 	get_moviePath(moviePath,id,time);	
 	file=fopen(moviePath, "rb+");
 	fd=fileno(file);
 	if( rdlockFile(fd) == -1){
 		printf("Imposible realizar la reserva. Pruebe de nuevo en unos minutos.");
-		return;
+		return -1;
 	}
 	fread(&seats, sizeof(int), 1, file);
 	unlockFile(fd);
@@ -67,13 +69,13 @@ reserve_seat(char* id, char* time, int n){
 	fd=fileno(file);
 
 	if( wrlockFile(fd) == -1){
-		printf("Imposible realizar la reserva. Pruebe de nuevo en unos minutos.");
+		printf("It was not possible to make the reservation. Try again later.\n");
 		return;
 	}
 	fread(&seats, sizeof(int), 1, file);
 
 	if( seats < n ){
-		printf("No hay asientos disponibles");
+		printf("Sorry, no seats available.\n");
 		return;
 	}
 	
@@ -83,7 +85,7 @@ reserve_seat(char* id, char* time, int n){
 	fwrite(&seats, sizeof(int), 1, file);
 	unlockFile(fd);
 	fclose(file);
-	printf("Reserva exitosa");
+	printf("The seats have been successfully reserved.\n");
 	return;
 }
 
@@ -103,4 +105,32 @@ int
 unlockFile(int fd){
 	fl.l_type = F_UNLCK;
 	return fcntl(fd, F_SETLKW, &fl);
+}
+
+void get_times(char times[5][5]){
+	int i = 0;
+
+	FILE *file = fopen(TIMES, "rb+");
+    if( file == NULL ){
+        printf("Invalid time: not found in database\n");
+        return ;
+    }
+
+    fread(times, 5, CANT_TIMES, file);
+
+	fclose(file);
+}
+
+int getCantMovies(){
+	FILE * file=fopen(MOVIES_PATH, "rb+");
+	int fd=fileno(file);
+	int n=0;
+	rdlockFile(fd);
+	if (file!=NULL){
+		fseek(file, 0, SEEK_END);
+		n=ftell(file)/sizeof(Movie);
+	}
+	unlockFile(fd);
+	fclose(file);
+	return n;
 }
