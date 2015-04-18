@@ -47,7 +47,7 @@ get_seats(char* id, char* time){
 	fd=fileno(file);
 	if( rdlockFile(fd) == -1){
 		printf("Imposible realizar la reserva. Pruebe de nuevo en unos minutos.");
-		return;
+		return -1;
 	}
 	fread(&seats, sizeof(int), 1, file);
 	unlockFile(fd);
