@@ -33,8 +33,8 @@ get_moviePath(char* moviePath,char* id, char* time){
 
 	char movieID[20];
 	strcpy(movieID, id);
-    	strcat(movieID, "-");
-    	strcat(movieID, time);
+    strcat(movieID, "-");
+    strcat(movieID, time);
 
 	
 	sprintf(moviePath, MOVIE_PATH, movieID);
@@ -44,7 +44,7 @@ get_seats(char* id, char* time){
 	FILE *file;
 	int seats,fd;
 	char moviePath[40];
-	get_moviePath(moviePath,id,time);	
+	get_moviePath(moviePath,id,time);
 	file=fopen(moviePath, "rb+");
 	fd=fileno(file);
 	if( rdlockFile(fd) == -1){
