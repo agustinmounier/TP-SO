@@ -24,7 +24,6 @@ main(void){
 	char times2[5][5];
 
 	Movie moviesRead[CANT_MOVIES];
-	
 
 	int i = 0;
 	int j = 0;

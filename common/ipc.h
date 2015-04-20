@@ -1,18 +1,20 @@
 #ifndef _ipc_
 #define _ipc_
-typedef enum {RESERVE_SEAT , SHOW_MOVIES, CHECk_SEATS} action;
+#include "common.h"
+typedef enum {RESERVE_SEAT , SHOW_MOVIES, CHECK_SEATS} action;
 
 typedef struct {
 	long clientpid;
 	action ac;
-	char[3] movieID;
-	char[5] times;
+	char movieID[3];
+	char times[5];
 	int cant_seats; 
 } Request;
 
 typedef struct 
 {
 	int value;
+	List_Movies movies_list[CANT_MOVIES];
 	
 }Response;
 #endif

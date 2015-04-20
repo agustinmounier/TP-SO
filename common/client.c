@@ -6,10 +6,10 @@
 int
 main(void){
 	char input[30];
-	printf("Welcome to SO-cinema.\n");
+	printf("\n\x1b[31mWelcome to SO-cinema.\x1b[0m\n\n");
 	while(1){
 		printf("Type the desired option: \n");
-		printf("ShowMovies, \n");
+		printf("ShowMovies, ReserveSeat, CheckSeats \n\n");
 		fgets(input, 30, stdin);
 		execute_input(input);
 	}
@@ -74,21 +74,6 @@ execute_input(char * input){
 		return;
 	}
 	printf("%s\n", "Invalid option.\n");
-
-	
-	/*char commands[3][15]={"showmovies", "reserveseat", "checkseats"};
-	for(; cmd < CANT_COMMANDS; cmd++){
-		if(strcmp(input, commands[cmd]) == 0)
-			break;
-	}
-
-	switch(cmd){
-		case 0: show_movies();
-				break;
-		case 1: reserve_seat("01", "0900", 20);break;
-		case 2: show_seats("01","0900");break;
-		default: printf("Invalid option. \n");
-	}*/
 }
 
 void
