@@ -121,16 +121,3 @@ void get_times(char times[5][5]){
 	fclose(file);
 }
 
-int getCantMovies(){
-	FILE * file=fopen(MOVIES_PATH, "rb+");
-	int fd=fileno(file);
-	int n=0;
-	rdlockFile(fd);
-	if (file!=NULL){
-		fseek(file, 0, SEEK_END);
-		n=ftell(file)/sizeof(Movie);
-	}
-	unlockFile(fd);
-	fclose(file);
-	return n;
-}

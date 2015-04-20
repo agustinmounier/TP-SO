@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 #include "../common/ipc.h"
 
-Request 
-void
-get_movies(Movie * moviesRead, int movies){
-	
+static Request req;
+
+List_Movies
+get_movies(){
+	req.clientpid=getpid();
 }
 
 int get_seats(char * id, char * time);
