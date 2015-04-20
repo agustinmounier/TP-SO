@@ -1,0 +1,14 @@
+#ifndef _clientBack_
+#define _clientBack_
+
+#include "../../common/common.h"
+
+typedef struct{
+	Movie movies_list[CANT_MOVIES];
+}List_Movies;
+
+List_Movies getMovies(void);
+void getTimes(char times[5][5]);
+int getSeats(char * movieId, char* movieTime);
+
+#endif
