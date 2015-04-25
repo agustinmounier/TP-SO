@@ -12,6 +12,7 @@ static char clientFile[40];
 void initialize(){
 	req.clientpid=getpid();
 	sprintf(clientFile,CLIENT_FILE_PATH,(long)getpid());
+	sigaction(SIGUSR2, user2_handler);
 	//signal(SIGINT, onSigInt);
 }
 
@@ -40,6 +41,7 @@ onSigInt(){
     return;
 }*/
 
+
 void
 reserve_seats(char * id, char * time){
 	req.action=RESERVE_SEAT;
@@ -65,7 +67,7 @@ create_request(){
 
 void 
 notify_server(){
-
+	kill()
 }
 
 void

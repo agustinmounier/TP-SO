@@ -67,6 +67,8 @@ dealWithClient(unsigned long pid){
 
 void
 readClientMessage(unsigned long pid){
+	Request req;
+	Response resp;
 	char clientFile[40];
 	sprintf(clientFile,CLIENT_FILE_PATH,pid);
 	File* file= fopen(clientFile, "rb");
@@ -74,6 +76,22 @@ readClientMessage(unsigned long pid){
 		printf("%s\n","Unable to open file from client");
 		return;
 	}
+	if(fread(&req,sizeof(Request),1,file)==0){
+		printf("%s\n","Unable to read file" );
+		return;
+	}
+	fclose();
+	excecuteRequest(req,res);
+	File* file= fopen(clientFile, "rb");
+	if(file==NULL){
+		printf("%s\n","Unable to open file from client");
+		return;
+	}
+	if(fwrite(&resp,sizeof(Reponse),1,file)==0){
+		printf("%s\n","Unable to read file" );
+		return;
+	}
+	kill(pid, SIGUSR2);
 }
 
 /*void 
