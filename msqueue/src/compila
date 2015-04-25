@@ -1,0 +1,2 @@
+gcc -o msqueueClient.o msqueueClient.c ../../common/client.c
+gcc -o msqueueServer.o msqueueServer.c ../../common/server.c ../../common/dbAccess/dbAccess.c

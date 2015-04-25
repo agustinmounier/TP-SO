@@ -65,7 +65,6 @@ execute_input(char * input){
 			id[i]=*(input+(11+i));
 		}
 		id[2] = '\0'; 
-		printf("%s\n", id);
 		if(i!=2|| input[13] !=' '){
 			printf("%s\n", "Not valid arguments.");
 			return;
@@ -78,7 +77,6 @@ execute_input(char * input){
 			return;
 		}
 		times[4]='\0';
-		printf("%s\n", times);
 		show_seats(id,times);
 		return;
 	}

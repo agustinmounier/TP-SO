@@ -23,25 +23,6 @@ removeFifo(void){
     unlink(fifoPath);
 }
 
-/*
-int
-main(void){
-	char input[30];
-	printf("Welcome to SO-cinema.\n");
-	initialize();
-	char check[20] = "check_seats";
-	while(1){
-		printf("Type the desired option: \n");
-		printf("ShowMovies, \n");
-		fgets(input, 30, stdin);
-		if(strcmp(input, check)){
-			printf("seats %d\n", check_seats("01", "0100"));
-		}else{
-			printf("invalid comand.\n");
-		}
-	}
-}
-*/
 void
 initialize(void){
 
@@ -130,7 +111,7 @@ void
 getTimes(char times[5][5]){
     request.clientpid = getpid();
     request.ac = GET_TIMES;
-    request.movieTimes = times;
+    //request.movieTimes = times;
     sendRequest();
 }
 

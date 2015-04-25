@@ -46,7 +46,6 @@ get_seats(char* id, char* time){
 	char moviePath[40];
 	get_moviePath(moviePath,id,time);
 	file=fopen(moviePath, "rb+");
-	printf("%s\n", moviePath);
 	if(file==NULL){
 		printf("The entered data doesn´t correspond to an available screening. \n");
 		return -1;
@@ -89,7 +88,6 @@ reserve_seat(char* id, char* time, int n){
 	}
 	
 	seats=seats-n;
-	printf("seats: %d\n", seats);
 	fseek(file, 0, SEEK_SET);
 	fwrite(&seats, sizeof(int), 1, file);
 	unlockFile(fd);
