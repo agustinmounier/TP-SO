@@ -2,3 +2,4 @@
 #define SERVER_PID_FILE "../../signalsfiles/server_pid"
 
 void communicate_with_server();
+void user2_handler();

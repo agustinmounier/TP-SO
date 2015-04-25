@@ -14,5 +14,4 @@ int getCantMovies();
 
 void show_seats(char * movie, char * time);
 
-void executeRequest(Request r, Response * response);
 #endif

@@ -1,6 +1,5 @@
 #ifndef _ipc_
 #define _ipc_
-
 #include "../database/src/db.h"
 
 typedef enum {RESERVE_SEAT , GET_MOVIES, CHECK_SEATS, GET_TIMES} action;
@@ -24,4 +23,8 @@ typedef struct
 	int value;
 	List_Movies list;
 }Response;
+
+
+void executeRequest(Request r, Response * response);
+
 #endif
