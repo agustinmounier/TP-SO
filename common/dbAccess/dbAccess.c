@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
-#include "./../common.h"
+#include "../common.h"
 #include "../../database/src/db.h"
 
 static struct flock fl = {.l_start = 0, .l_whence = SEEK_SET, .l_len = 0};
@@ -31,7 +31,7 @@ get_movies(){
 void
 get_moviePath(char* moviePath,char* id, char* time){
 
-	char movieID[30];
+	char movieID[10];
 	strcpy(movieID, id);
     strcat(movieID, "-");
     strcat(movieID, time);
@@ -46,6 +46,7 @@ get_seats(char* id, char* time){
 	char moviePath[40];
 	get_moviePath(moviePath,id,time);
 	file=fopen(moviePath, "rb+");
+	printf("%s\n", moviePath);
 	if(file==NULL){
 		printf("The entered data doesn´t correspond to an available screening. \n");
 		return -1;

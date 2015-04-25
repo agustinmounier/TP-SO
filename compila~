@@ -1,0 +1,3 @@
+gcc ./common/dbAccess.c ./common/client.c ./fcntl/src/clientBack.c
+
+ 

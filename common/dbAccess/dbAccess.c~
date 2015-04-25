@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
-#include "common.h"
-#include "../database/src/db.h"
+#include "../common.h"
+#include "../../database/src/db.h"
 
 static struct flock fl = {.l_start = 0, .l_whence = SEEK_SET, .l_len = 0};
 
@@ -31,7 +31,7 @@ get_movies(){
 void
 get_moviePath(char* moviePath,char* id, char* time){
 
-	char movieID[20];
+	char movieID[10];
 	strcpy(movieID, id);
     strcat(movieID, "-");
     strcat(movieID, time);

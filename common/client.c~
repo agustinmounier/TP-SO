@@ -77,7 +77,6 @@ execute_input(char * input){
 			return;
 		}
 		times[4]='\0';
-		printf("%s\n", times);
 		show_seats(id,times);
 		return;
 	}
