@@ -35,7 +35,7 @@ void main(){
 }
 
 void
-user1_handler(int sig){
+user1_handler(int sig, siginfo_t *info, void *ptr){
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset,SIGUSR1);
@@ -49,7 +49,7 @@ user1_handler(int sig){
 				return;
 				 }
 		case 0: {
-				dealWithClient();
+				dealWithClient(info->si_pid);
 		}
 		default: {
 			if(sigpromask(SIG_UNBLOCK,&sigset, NULL)==-1){
@@ -61,13 +61,19 @@ user1_handler(int sig){
 }
 
 void
-dealWithClient(){
-	readClientMessage();
+dealWithClient(unsigned long pid){
+	readClientMessage(pid);
 }
 
 void
-readClientMessage(){
-
+readClientMessage(unsigned long pid){
+	char clientFile[40];
+	sprintf(clientFile,CLIENT_FILE_PATH,pid);
+	File* file= fopen(clientFile, "rb");
+	if(file==NULL){
+		printf("%s\n","Unable to open file from client");
+		return;
+	}
 }
 
 /*void 

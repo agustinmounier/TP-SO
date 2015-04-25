@@ -10,6 +10,10 @@ executeRequest(Request r, Response * response){
         case CHECK_SEATS:
             response->value = get_seats(r.movieID, r.times);
             break;
+        case SHOW_MOVIE:
+            response->list=get_movies();
+        case RESERVE_SEAT:
+            response->value=reserve_seat(r.movieID,r.times);
         default:
         	printf("Invalid action.\n");
 

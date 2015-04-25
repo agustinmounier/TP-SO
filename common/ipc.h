@@ -14,5 +14,6 @@ typedef struct {
 typedef struct 
 {
 	int value;
+	ListMovies list;
 }Response;
 #endif
