@@ -23,6 +23,7 @@ removeFifo(void){
     unlink(fifoPath);
 }
 
+/*
 int
 main(void){
 	char input[30];
@@ -40,7 +41,7 @@ main(void){
 		}
 	}
 }
-
+*/
 void
 initialize(void){
 
@@ -107,7 +108,7 @@ sendRequest(void){
 }
 
 int
-check_seats(char * movieId, char * movieTime){
+getSeats(char * movieId, char * movieTime){
 
 	request.clientpid = getpid();
 	request.ac = CHECK_SEATS;
@@ -115,5 +116,30 @@ check_seats(char * movieId, char * movieTime){
 	strcpy(request.times, movieTime);
 	sendRequest();
 	return response.value;
+}
 
+List_Movies
+getMovies(void){
+    request.clientpid = getpid();
+    request.ac = GET_MOVIES;
+    sendRequest();
+    return response.list;
+}
+
+void
+getTimes(char times[5][5]){
+    request.clientpid = getpid();
+    request.ac = GET_TIMES;
+    request.movieTimes = times;
+    sendRequest();
+}
+
+void
+reserveSeat(char* id, char* time, int n){
+    request.clientpid = getpid();
+    request.ac = RESERVE_SEAT;
+    strcpy(request.movieID, id);
+    strcpy(request.times, time);
+    request.cant_seats = n;
+    sendRequest();
 }

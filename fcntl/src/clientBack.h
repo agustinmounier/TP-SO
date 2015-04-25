@@ -6,5 +6,6 @@
 List_Movies getMovies(void);
 void getTimes(char times[5][5]);
 int getSeats(char * movieId, char* movieTime);
+void reserveSeat(char* id, char* time, int n);
 
 #endif

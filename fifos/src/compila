@@ -1,0 +1,2 @@
+gcc -o fifoClient.o fifoClient.c ../../common/client.c
+gcc -o fifoServer.o fifoServer.c ../../common/server.c ../../common/dbAccess/dbAccess.c

@@ -17,3 +17,8 @@ int
 getSeats(char * movieId, char* movieTime){
 	return get_seats(movieId, movieTime);
 }
+
+void
+reserveSeat(char* id, char* time, int n){
+	reserve_seat(id, time, n);
+}

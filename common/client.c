@@ -9,6 +9,7 @@ int
 main(void){
 	char input[30];
 	printf("\n\x1b[31mWelcome to SO-cinema.\x1b[0m\n\n");
+	initialize();
 	while(1){
 		printf("Type the desired option: \n");
 		printf("ShowMovies, ReserveSeat, CheckSeats \n\n");
@@ -56,7 +57,7 @@ execute_input(char * input){
 			printf("%s\n","Not valid arguments" );
 			return;
 		}
-		reserve_seat(id,times,cant);
+		reserveSeat(id,times,cant);
 		return;
 	}
 	if(strcmp(cmd, "checkseats")==0){

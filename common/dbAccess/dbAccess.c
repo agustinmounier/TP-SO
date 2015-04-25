@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
-#include "../common.h"
+#include "dbAccess.h"
 #include "../../database/src/db.h"
 
 static struct flock fl = {.l_start = 0, .l_whence = SEEK_SET, .l_len = 0};
