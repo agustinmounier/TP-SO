@@ -2,7 +2,6 @@
 #define _common_
 
 #include "../database/src/db.h"
-#include "ipc.h"
 #define CANT_COMMANDS 3
 #define CANT_MOVIES 10
 
@@ -35,5 +34,4 @@ int getCantMovies();
 
 void show_seats(char * movie, char * time);
 
-void executeRequest(Request r, Response * response);
 #endif

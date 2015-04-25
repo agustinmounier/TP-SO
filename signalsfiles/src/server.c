@@ -101,5 +101,3 @@ onSigInt(int sig) {
 	}
 	return;
 }*/
-
-void

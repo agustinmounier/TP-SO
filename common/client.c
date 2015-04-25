@@ -56,7 +56,7 @@ execute_input(char * input){
 			printf("%s\n","Not valid arguments" );
 			return;
 		}
-		reserve_seat(id,times,cant);
+		reserve_seats(id,times,cant);
 		return;
 	}
 	if(strcmp(cmd, "checkseats")==0){

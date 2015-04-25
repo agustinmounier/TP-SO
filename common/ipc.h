@@ -1,6 +1,6 @@
 #ifndef _ipc_
 #define _ipc_
-
+#include "common.h"
 typedef enum {RESERVE_SEAT , SHOW_MOVIES, CHECK_SEATS} action;
 
 typedef struct {
@@ -14,6 +14,11 @@ typedef struct {
 typedef struct 
 {
 	int value;
-	ListMovies list;
+	List_Movies list;
+
 }Response;
+
+
+void executeRequest(Request r, Response * response);
+
 #endif
