@@ -30,10 +30,11 @@ int main(){
 	sigemptyset(&sig.sa_mask);
     sig.sa_flags = 0;
     sig.sa_handler = user1_handler;
-    sigaction(SIGUSR1, &sig, NULL);
+    sigaction(SIGUSR1, &sig, 0);
     while(1){
 
     }
+    return 0;
 }
 
 void
@@ -51,16 +52,18 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 				break;
 				 }
 		case 0: {
+				printf("%d\n",info->si_pid );
 				dealWithClient(info->si_pid);
 				break;
 		}
 		default: {
 			if(sigprocmask(SIG_UNBLOCK,&sigset, NULL)==-1){
 				write(0,"Couln't unblock signals",24);
+				return;
 			}
-			break;
 		}		
 	}
+	return;
 }
 
 void
@@ -70,30 +73,33 @@ dealWithClient(unsigned long pid){
 
 void
 readClientMessage(unsigned long pid){
+	printf("REad%d", getpid());
 	Request req;
 	Response resp;
 	char clientFile[40];
 	sprintf(clientFile,CLIENT_FILE_PATH,pid);
+	printf("%s\n",clientFile);
 	FILE* file= fopen(clientFile, "rb");
 	if(file==NULL){
 		printf("%s\n","Unable to open file from client");
 		return;
 	}
-	if(fread(&req,sizeof(Request),1,file)==0){
+	if(fread(&req,sizeof(Request),1,file)==-1){
 		printf("%s\n","Unable to read file" );
 		return;
 	}
 	fclose(file);
 	executeRequest(req,&resp);
-	file= fopen(clientFile, "rb");
+	file=fopen(clientFile, "rb");
 	if(file==NULL){
 		printf("%s\n","Unable to open file from client");
 		return;
 	}
-	if(fwrite(&resp,sizeof(Response),1,file)==0){
-		printf("%s\n","Unable to read file" );
+	if(fwrite(&resp,sizeof(Response),1,file)==-1){
+		printf("%s\n","Unable to write file" );
 		return;
 	}
+	fclose(file);
 	kill(pid, SIGUSR2);
 }
 

@@ -24,14 +24,22 @@ void initialize(){
 }
 
 List_Movies
-get_movies(){
+getMovies(){
     req.ac=GET_MOVIES;
     communicate_with_server();
     return resp.list;
 }
 
 void
-sig_usr2_handler(int s){
+getTimes(char times[5][5]){
+	req.ac=GET_TIMES;
+	communicate_with_server();
+	return;
+}
+
+void
+user2_handler(int s){
+	printf("%s\n","Hola" );
     sigset_t sigset;
     sigemptyset(&sigset);
     sigaddset(&sigset,SIGUSR1);
@@ -61,7 +69,7 @@ sig_usr2_handler(int s){
 }
 
 int
-get_seats(char * id, char * times){
+getSeats(char * id, char * times){
 	req.ac=CHECK_SEATS;
 	strcpy(req.times,times);
 	strcpy(req.movieID,id);
@@ -80,7 +88,7 @@ onSigInt(){
 
 
 void
-reserve_seats(char * id, char * times,int n){
+reserveSeat(char * id, char * times,int n){
 	req.ac=RESERVE_SEAT;
 	strcpy(req.times,times);
 	strcpy(req.movieID,id);
@@ -115,6 +123,7 @@ notify_server(){
 		printf("%s\n","Couldn't read the server file" );
 		return;
 	}
+	fclose(file);
 	kill(pid_s, SIGUSR1);
 	return;
 }

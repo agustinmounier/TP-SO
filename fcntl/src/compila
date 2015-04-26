@@ -1,0 +1,1 @@
+gcc -o fcntlClient.o clientBack.c ../../common/client.c ../../common/dbAccess/dbAccess.c
