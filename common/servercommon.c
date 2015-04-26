@@ -16,6 +16,5 @@ executeRequest(Request r, Response * response){
             response->value=reserve_seat(r.movieID,r.times);
         default:
         	printf("Invalid action.\n");
-
     }
 }
