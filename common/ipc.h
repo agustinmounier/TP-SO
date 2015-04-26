@@ -14,14 +14,15 @@ typedef struct {
 	action ac;
 	char movieID[3];
 	char times[5];
-	char movieTimes[5][5];
 	int cant_seats; 
+	char movieTimes[5][5];
 }Request;
 
 typedef struct 
 {
 	int value;
 	List_Movies list;
+	char movieTimes[5][5];
 }Response;
 
 

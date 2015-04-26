@@ -65,9 +65,11 @@ getMovies(void){
 
 void
 getTimes(char times[5][5]){
+    int i = 0;
     reqMsg.req.ac = GET_TIMES;
-    //reqMsg.req.movieTimes = times;
     sendMsg();
+    for(; i < 5; i++)
+        strcpy(times[i], resMsg.resp.movieTimes[i]);
 }
 
 void
