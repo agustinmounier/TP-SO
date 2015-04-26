@@ -12,8 +12,9 @@ main(void){
 	printf("\n\x1b[31mWelcome to SO-cinema.\x1b[0m\n\n");
 	initialize();
 	while(1){
-		printf("Type the desired option: \n");
-		printf("ShowMovies, ReserveSeat, CheckSeats \n\n");
+		printf("\n");
+		printf("What would you like to do? Type the desired option: \n");
+		printf("ShowMovies, ReserveSeat, CheckSeats, Help \n");
 		fgets(input, 40, stdin);
 		execute_input(input);
 		
@@ -32,11 +33,11 @@ execute_input(char * input){
 		cmd[i]=input[i];
 	}
 	cmd[i] = '\0';
+
 	if(strcmp(cmd, "ShowMovies")==0){
 		show_movies();
 		return;
 	}
-
 	if(strcmp(cmd,"ReserveSeat")==0){
 		for(i=0;i<2 && input+(12+i)!='\0' && input[12+i]!=' ';i++){
 			id[i]=*(input+(12+i));
@@ -60,6 +61,7 @@ execute_input(char * input){
 			return;
 		}
 		reserveSeat(id,times,cant);
+		printf("%s\n%s\n", "The reserve has been succesfully made.", "Enjoy your movie!");
 		return;
 	}
 	if(strcmp(cmd, "CheckSeats")==0){
@@ -83,6 +85,13 @@ execute_input(char * input){
 		show_seats(id,times);
 		return;
 	}
+	if(strcmp(cmd, "Help")==0){
+		printf("ShowMovies: displays a list of all the movies available.\n\n");
+		printf("CheckSeats: indicates how many seats left are available for that movie. You will have to indicate the ID and time of the movie.\n");
+		printf("	Example: 'CheckSeats 09 2100' will indicate the number of seats left for the movie which has 09 as id and airs at 2100\n\n");
+		printf("ReserveSeats: reserves the seats for a specific movie at a specific time. You will have to indicate the id and time of the movie as well as the amount of seats to reserve.\n");
+		printf("	Example: 'ReserveSeats 02 2100 5' will reserve 5 seats for the movie which has id 02 at 2100");
+	}
 	printf("%s\n", "Invalid option.\n");
 }
 
@@ -97,9 +106,10 @@ show_movies(){
 	for(; i<CANT_MOVIES; i++){
 		printf("%s - %s\n", list.movies_list[i].id, list.movies_list[i].name);
 	}
+	printf("\n");
 	printf("Available times:\n");
 	for(i=0; i<5; i++){
-		printf("%s      ", times[i]);
+		printf("%s     ", times[i]);
 	}
 	printf("\n");
 }
