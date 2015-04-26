@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include "../../common/ipc.h"
 #include "../../common/common.h"
 #include "filessig.h"
@@ -10,7 +12,7 @@ static Response resp;
 struct sigaction sig;
 
 
-void main(){
+int main(){
 	long pid = (long)getpid();
 	FILE* file= fopen(SERVER_PID_FILE, "wb");
 
@@ -28,10 +30,11 @@ void main(){
 	sigemptyset(&sig.sa_mask);
     sig.sa_flags = 0;
     sig.sa_handler = user1_handler;
-    sigaction(SIGUSR1, &sig, NULL);
+    sigaction(SIGUSR1, &sig, 0);
     while(1){
 
     }
+    return 0;
 }
 
 void
@@ -39,25 +42,28 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset,SIGUSR1);
-	if(sigpromask(SIG_BLOCK,&sigset, NULL)==-1){
+	if(sigprocmask(SIG_BLOCK,&sigset, NULL)==-1){
 		write(0,"Couln't block signals",22);
 		return;
 	}
 	switch(fork()){
 		case -1: {
 				write(0, "Unable to fork process",22);
-				return;
+				break;
 				 }
 		case 0: {
+				printf("%s\n","HOLLIII");
 				dealWithClient(info->si_pid);
+				break;
 		}
 		default: {
-			if(sigpromask(SIG_UNBLOCK,&sigset, NULL)==-1){
+			if(sigprocmask(SIG_UNBLOCK,&sigset, NULL)==-1){
 				write(0,"Couln't unblock signals",24);
 				return;
 			}
 		}		
 	}
+	return;
 }
 
 void
@@ -71,26 +77,29 @@ readClientMessage(unsigned long pid){
 	Response resp;
 	char clientFile[40];
 	sprintf(clientFile,CLIENT_FILE_PATH,pid);
-	File* file= fopen(clientFile, "rb");
+	printf("%s\n",clientFile);
+	FILE* file= fopen(clientFile, "rb+");
 	if(file==NULL){
 		printf("%s\n","Unable to open file from client");
 		return;
 	}
-	if(fread(&req,sizeof(Request),1,file)==0){
+	if(fread(&req,sizeof(Request),1,file)==-1){
 		printf("%s\n","Unable to read file" );
 		return;
 	}
-	fclose();
-	excecuteRequest(req,res);
-	File* file= fopen(clientFile, "rb");
+	fclose(file);
+	printf("%s\n", "hola");
+	executeRequest(req,&resp);
+	file=fopen(clientFile, "wb+");
 	if(file==NULL){
 		printf("%s\n","Unable to open file from client");
 		return;
 	}
-	if(fwrite(&resp,sizeof(Reponse),1,file)==0){
-		printf("%s\n","Unable to read file" );
+	if(fwrite(&resp,sizeof(Response),1,file)==-1){
+		printf("%s\n","Unable to write file" );
 		return;
 	}
+	fclose(file);
 	kill(pid, SIGUSR2);
 }
 

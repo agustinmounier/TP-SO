@@ -8,13 +8,15 @@
 int
 main(void){
 	char input[30];
+	int i;
 	printf("\n\x1b[31mWelcome to SO-cinema.\x1b[0m\n\n");
 	initialize();
 	while(1){
 		printf("Type the desired option: \n");
 		printf("ShowMovies, ReserveSeat, CheckSeats \n\n");
-		fgets(input, 30, stdin);
+		scanf("%s",input);
 		execute_input(input);
+		
 	}
 }
 
@@ -29,12 +31,12 @@ execute_input(char * input){
 		cmd[i]=input[i];
 	}
 	cmd[i] = '\0';
-	if(strcmp(cmd, "showmovies")==0){
+	if(strcmp(cmd, "ShowMovies")==0){
 		show_movies();
 		return;
 	}
 
-	if(strcmp(cmd,"reserveseat")==0){
+	if(strcmp(cmd,"ReserveSeat")==0){
 		for(i=0;i<2 && input+(12+i)!='\0' && input[12+i]!=' ';i++){
 			id[i]=*(input+(12+i));
 		}
@@ -60,7 +62,7 @@ execute_input(char * input){
 		reserveSeat(id,times,cant);
 		return;
 	}
-	if(strcmp(cmd, "checkseats")==0){
+	if(strcmp(cmd, "CheckSeats")==0){
 		for(i=0;i<2 && input+(11+i)!='\0' && input[11+i]!=' ';i++){
 			id[i]=*(input+(11+i));
 		}

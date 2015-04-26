@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include "../../common/ipc.h"
 #include "../../common/common.h"
 #include "filessig.h"
@@ -9,23 +11,65 @@
 static Request req;
 static Response resp;
 static char clientFile[40];
+static struct sigaction sig;
 
 void initialize(){
-	req.clientpid=getpid();
+	req.clientpid=(long)getpid();
 	sprintf(clientFile,CLIENT_FILE_PATH,(long)getpid());
-	sigaction(SIGUSR2, user2_handler,0);
+	sigemptyset(&sig.sa_mask);
+    sig.sa_flags = 0;
+    sig.sa_handler = user2_handler;
+	sigaction(SIGUSR2, &sig,0);
 	//signal(SIGINT, onSigInt);
 }
 
 List_Movies
-get_movies(){
-    req.ac=SHOW_MOVIES;
+getMovies(){
+    req.ac=GET_MOVIES;
     communicate_with_server();
     return resp.list;
 }
 
+void
+getTimes(char times[5][5]){
+	req.ac=GET_TIMES;
+	communicate_with_server();
+	return;
+}
+
+void
+user2_handler(int s){
+	printf("%s\n","Hola" );
+    sigset_t sigset;
+    sigemptyset(&sigset);
+    sigaddset(&sigset,SIGUSR1);
+    sigaddset(&sigset,SIGUSR2);
+
+	if(sigprocmask(SIG_BLOCK,&sigset, NULL)==-1){
+		write(0,"Couldn't block signals",22);
+		return;
+	}
+
+    FILE * file = fopen(clientFile, "rb");
+    if(file == NULL){
+    	write(0,"Couldn't open file",18);
+		return;
+    }
+    if(fread(&resp, sizeof(Response), 1, file) == -1){
+    	write(0,"Couldn't read file",18);
+		return;
+    }
+
+    fclose(file);
+
+    if( sigprocmask(SIG_UNBLOCK, &sigset, NULL) == -1 ){
+        write(0,"Couldn't unblock signals",24);
+		return;
+    }
+}
+
 int
-get_seats(char * id, char * times){
+getSeats(char * id, char * times){
 	req.ac=CHECK_SEATS;
 	strcpy(req.times,times);
 	strcpy(req.movieID,id);
@@ -44,7 +88,7 @@ onSigInt(){
 
 
 void
-reserve_seats(char * id, char * times,int n){
+reserveSeat(char * id, char * times,int n){
 	req.ac=RESERVE_SEAT;
 	strcpy(req.times,times);
 	strcpy(req.movieID,id);
@@ -69,7 +113,7 @@ create_request(){
 
 void 
 notify_server(){
-	FILE *file=fopen(SERVER_PID_FILE,"rb");
+	FILE *file=fopen(SERVER_PID_FILE,"rb+");
 	unsigned long pid_s;
 	if(file==NULL){
 		printf("%s\n","There is no server available" );
@@ -79,6 +123,7 @@ notify_server(){
 		printf("%s\n","Couldn't read the server file" );
 		return;
 	}
+	fclose(file);
 	kill(pid_s, SIGUSR1);
 	return;
 }

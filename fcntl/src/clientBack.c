@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../../common/common.h"
+#include "../../common/dbAccess/dbAccess.h"
 
 
 List_Movies
@@ -21,4 +22,9 @@ getSeats(char * movieId, char* movieTime){
 void
 reserveSeat(char* id, char* time, int n){
 	reserve_seat(id, time, n);
+}
+
+void 
+initialize(){
+	return;
 }

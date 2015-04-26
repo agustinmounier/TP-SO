@@ -10,7 +10,7 @@ typedef struct{
 }List_Movies;
 
 typedef struct {
-	long clientpid;
+	unsigned long clientpid;
 	action ac;
 	char movieID[3];
 	char times[5];
@@ -25,6 +25,6 @@ typedef struct
 }Response;
 
 
-void executeRequest(Request r, Response * response);
+void executeRequest(Request r, Response* response);
 
 #endif
