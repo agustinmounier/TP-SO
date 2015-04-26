@@ -16,7 +16,6 @@ int main(void){
 	}
 	fclose(file);
 	req = (Request *)getmem();
-	memset(req, 0, SIZE);
 	resp = (Response *)req;
 	initsemaphores();
 	signal(SIGINT, onSigInt);

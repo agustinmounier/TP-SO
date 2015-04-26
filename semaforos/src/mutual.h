@@ -14,7 +14,8 @@
 #define SIZE sizeof(Request)
 #define KEY ftok("/tmp/semshm", 1)
  
-void *getmem(void);
+
+void * getmem(void);
 
 void initsemaphores(void);
 /*
