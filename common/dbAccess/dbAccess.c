@@ -115,8 +115,7 @@ unlockFile(int fd){
 }
 
 void get_times(char times[5][5]){
-	int i = 0;
-
+	
 	FILE *file = fopen(TIMES, "rb+");
     if( file == NULL ){
         printf("Invalid time: not found in database\n");
@@ -124,7 +123,6 @@ void get_times(char times[5][5]){
     }
 
     fread(times, 5, CANT_TIMES, file);
-
 	fclose(file);
 }
 

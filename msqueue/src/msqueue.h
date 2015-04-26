@@ -17,15 +17,22 @@ typedef struct {
 } ResponseMsg;
 
 void initializeServer(void);
+
 void terminateServer(void);
+
 void onSigInt(int sig);
+
 void initialize(void);
+
 void terminateClient(void);
+
 void sendMsg(void);
+
 int getSeats(char * movieId, char * movieTime);
+
 List_Movies getMovies(void);
+
 void getTimes(char times[5][5]);
+
 void reserveSeat(char* id, char* time, int n);
-
-
 #endif

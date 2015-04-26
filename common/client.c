@@ -14,7 +14,7 @@ main(void){
 	while(1){
 		printf("Type the desired option: \n");
 		printf("ShowMovies, ReserveSeat, CheckSeats \n\n");
-		scanf("%s",input);
+		fgets(input, 40, stdin);
 		execute_input(input);
 		
 	}
@@ -27,6 +27,7 @@ execute_input(char * input){
 	char times[5];
 	int i;
 	int cant;
+
 	for(i=0; i<15 && input[i]!= '\0' && input[i]!=' ' && input[i]!= '\n';i++){
 		cmd[i]=input[i];
 	}
@@ -41,7 +42,6 @@ execute_input(char * input){
 			id[i]=*(input+(12+i));
 		}
 		id[2] = '\0'; 
-		printf("%s\n", id);
 		if(i!=2|| input[14] !=' '){
 			printf("%s\n", "Not valid arguments.");
 			return;
@@ -66,6 +66,7 @@ execute_input(char * input){
 		for(i=0;i<2 && input+(11+i)!='\0' && input[11+i]!=' ';i++){
 			id[i]=*(input+(11+i));
 		}
+
 		id[2] = '\0'; 
 		if(i!=2|| input[13] !=' '){
 			printf("%s\n", "Not valid arguments.");

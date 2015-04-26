@@ -55,14 +55,12 @@ initializeServer(void){
 void
 terminateServer(void){
     int exit_status = EXIT_SUCCESS;
-    if( msqidRcv != -1 && msgctl(msqidRcv, IPC_RMID, NULL) == -1 ) 
+    if(msqidRcv != -1 && msgctl(msqidRcv, IPC_RMID, NULL) == -1) 
     	exit_status = EXIT_FAILURE;
-    if( msqidSnd != -1 && msgctl(msqidSnd, IPC_RMID, NULL) == -1 ) 
+    if(msqidSnd != -1 && msgctl(msqidSnd, IPC_RMID, NULL) == -1) 
     	exit_status = EXIT_FAILURE;
-    if( remove("/tmp/mqueues-clients") == -1 ) 
-    	exit_status = EXIT_FAILURE;  
-    if( remove("/tmp/mqueues-server") == -1 ) 
-    	exit_status = EXIT_FAILURE;  
+    if(remove("/tmp/mqueues-clients") == -1 || remove("/tmp/mqueues-server") == -1) 
+    	exit_status = EXIT_FAILURE;
     exit(exit_status);
 }
 

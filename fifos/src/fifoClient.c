@@ -50,13 +50,12 @@ initialize(void){
     }
 }
 
-//TODO: ver q onda
 void
 terminateClient(void){
     int exit_status = EXIT_SUCCESS;
-    if(close(client_fd)) exit_status = EXIT_FAILURE;
-    if(close(server_fd)) exit_status = EXIT_FAILURE;
-    if(unlink(fifoPath)) exit_status = EXIT_FAILURE;
+    if(close(client_fd) == -1 || close(server_fd) == -1 || 
+        unlink(fifoPath) == -1) 
+        exit_status = EXIT_FAILURE;
     exit(exit_status);
 }
 
@@ -71,17 +70,17 @@ sendRequest(void){
 		printf("Error when writing into server.\n");
         exit(EXIT_FAILURE);
     }
-	if( (client_fd = open(fifoPath, O_RDONLY)) == -1){
+	if((client_fd = open(fifoPath, O_RDONLY)) == -1){
         printf("Error when opening client FIFO\n");
         exit(EXIT_FAILURE);
     }
 
-    if( read(client_fd, &response, sizeof(Response)) != sizeof(Response)){
+    if(read(client_fd, &response, sizeof(Response)) != sizeof(Response)){
         printf("Couldn't read response from the server\n");
         exit(EXIT_FAILURE);
     }
 
-    if( close(client_fd) == -1 ){
+    if(close(client_fd) == -1){
         printf("Error while closing the client's FIFO\n");
         exit(EXIT_FAILURE);
     }
@@ -109,10 +108,13 @@ getMovies(void){
 
 void
 getTimes(char times[5][5]){
+    int i = 0;
     request.clientpid = getpid();
     request.ac = GET_TIMES;
-    //request.movieTimes = times;
     sendRequest();
+    for(; i < 5; i++)
+        strcpy(times[i], response.movieTimes[i]);
+
 }
 
 void
