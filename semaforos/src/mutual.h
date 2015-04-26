@@ -14,8 +14,8 @@
 #define SIZE sizeof(Request)
 #define KEY ftok("/tmp/semshm", 1)
  
-void fatal(char *s);
 void *getmem(void);
+
 void initsemaphores(void);
 /*
  * SIGINT handler
