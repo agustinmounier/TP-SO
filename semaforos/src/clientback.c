@@ -2,7 +2,6 @@
 #include <string.h>
 #include <signal.h>
 #include "mutual.h"
-#include "clientback.h"
 #include "../../common/common.h"
 #include "../../common/ipc.h"
  
@@ -12,7 +11,7 @@ static Response *resp;
 void initialize(void){
     req = (Request *)getmem();
     resp = malloc(sizeof(Response));
-    initmutex();
+    initsemaphores();
     signal(SIGINT, onSigInt);
     return;
 }
@@ -48,27 +47,6 @@ void reserve_seats(char * id, char * times, int n){
     leave(2);
     enter(3);
     memcpy(resp, req, sizeof(Response));
-}
-
-void create_request(){
-
-}
-
-void notify_server(){
-
-}
-
-void communicate_server(){
-
-}
-
-enter(1);
-    req->comm = CANCEL_SEAT;
-    req->movieID = movieID;
-    req->seat = seat;
-    leave(2);
-    enter(3);
-    memcpy(resp, req, sizeof(Response));
     leave(1);
-    return resp->ret;
 }
+
