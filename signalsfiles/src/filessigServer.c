@@ -14,6 +14,7 @@ struct sigaction sig;
 
 int main(){
 	long pid = (long)getpid();
+	printf("%s", "The server is running...");
 	FILE* file= fopen(SERVER_PID_FILE, "wb");
 
 	if(file==NULL){
@@ -76,7 +77,6 @@ readClientMessage(unsigned long pid){
 	Response resp;
 	char clientFile[40];
 	sprintf(clientFile,CLIENT_FILE_PATH,pid);
-	printf("%s\n",clientFile);
 	FILE* file= fopen(clientFile, "rb+");
 	if(file==NULL){
 		printf("%s\n","Unable to open file from client");
