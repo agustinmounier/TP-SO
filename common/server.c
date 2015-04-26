@@ -20,7 +20,7 @@ executeRequest(Request r, Response * response){
         	break;
         }
         case GET_TIMES:{
-        	get_times(r.movieTimes);break;
+        	get_times(response->movieTimes);break;
         }
         default:{
         	printf("Invalid action.\n");
