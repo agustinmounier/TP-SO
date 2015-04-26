@@ -8,7 +8,6 @@ void
 executeRequest(Request r, Response * response){
     switch(r.ac){
         case CHECK_SEATS:{
-            printf("%s\n","hola" );
             response->value = get_seats(r.movieID, r.times);
             break;
         }

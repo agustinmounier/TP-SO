@@ -52,7 +52,6 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 				break;
 				 }
 		case 0: {
-				printf("%s\n","HOLLIII");
 				dealWithClient(info->si_pid);
 				break;
 		}
@@ -88,7 +87,6 @@ readClientMessage(unsigned long pid){
 		return;
 	}
 	fclose(file);
-	printf("%s\n", "hola");
 	executeRequest(req,&resp);
 	file=fopen(clientFile, "wb+");
 	if(file==NULL){

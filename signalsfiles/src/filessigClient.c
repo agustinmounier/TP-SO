@@ -27,6 +27,7 @@ List_Movies
 getMovies(){
     req.ac=GET_MOVIES;
     communicate_with_server();
+    pause();
     return resp.list;
 }
 
@@ -34,12 +35,12 @@ void
 getTimes(char times[5][5]){
 	req.ac=GET_TIMES;
 	communicate_with_server();
+	pause();
 	return;
 }
 
 void
 user2_handler(int s){
-	printf("%s\n","Hola" );
     sigset_t sigset;
     sigemptyset(&sigset);
     sigaddset(&sigset,SIGUSR1);
@@ -50,7 +51,7 @@ user2_handler(int s){
 		return;
 	}
 
-    FILE * file = fopen(clientFile, "rb");
+    FILE * file = fopen(clientFile, "rb+");
     if(file == NULL){
     	write(0,"Couldn't open file",18);
 		return;
@@ -59,7 +60,6 @@ user2_handler(int s){
     	write(0,"Couldn't read file",18);
 		return;
     }
-
     fclose(file);
 
     if( sigprocmask(SIG_UNBLOCK, &sigset, NULL) == -1 ){
@@ -74,6 +74,7 @@ getSeats(char * id, char * times){
 	strcpy(req.times,times);
 	strcpy(req.movieID,id);
 	communicate_with_server();
+	pause();
 	return resp.value;
 }
 
@@ -94,6 +95,7 @@ reserveSeat(char * id, char * times,int n){
 	strcpy(req.movieID,id);
 	req.cant_seats=n;
 	communicate_with_server();
+	pause();
 	return ;
 }
 
