@@ -8,13 +8,15 @@
 int
 main(void){
 	char input[30];
+	int i;
 	printf("\n\x1b[31mWelcome to SO-cinema.\x1b[0m\n\n");
 	initialize();
 	while(1){
 		printf("Type the desired option: \n");
 		printf("ShowMovies, ReserveSeat, CheckSeats \n\n");
-		fgets(input, 30, stdin);
+		scanf("%s",input);
 		execute_input(input);
+		
 	}
 }
 
@@ -85,7 +87,6 @@ execute_input(char * input){
 
 void
 show_movies(){
-	printf("%s\n","aquiii" );
 	List_Movies list;
 	char times[5][5];
 	int i=0;

@@ -113,7 +113,7 @@ create_request(){
 
 void 
 notify_server(){
-	FILE *file=fopen(SERVER_PID_FILE,"rb");
+	FILE *file=fopen(SERVER_PID_FILE,"rb+");
 	unsigned long pid_s;
 	if(file==NULL){
 		printf("%s\n","There is no server available" );

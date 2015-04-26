@@ -52,7 +52,7 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 				break;
 				 }
 		case 0: {
-				printf("%d\n",info->si_pid );
+				printf("%s\n","HOLLIII");
 				dealWithClient(info->si_pid);
 				break;
 		}
@@ -73,13 +73,12 @@ dealWithClient(unsigned long pid){
 
 void
 readClientMessage(unsigned long pid){
-	printf("REad%d", getpid());
 	Request req;
 	Response resp;
 	char clientFile[40];
 	sprintf(clientFile,CLIENT_FILE_PATH,pid);
 	printf("%s\n",clientFile);
-	FILE* file= fopen(clientFile, "rb");
+	FILE* file= fopen(clientFile, "rb+");
 	if(file==NULL){
 		printf("%s\n","Unable to open file from client");
 		return;
@@ -89,8 +88,9 @@ readClientMessage(unsigned long pid){
 		return;
 	}
 	fclose(file);
+	printf("%s\n", "hola");
 	executeRequest(req,&resp);
-	file=fopen(clientFile, "rb");
+	file=fopen(clientFile, "wb+");
 	if(file==NULL){
 		printf("%s\n","Unable to open file from client");
 		return;
