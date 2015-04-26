@@ -17,7 +17,6 @@ main(void){
 		printf("ShowMovies, ReserveSeat, CheckSeats, Help \n");
 		fgets(input, 40, stdin);
 		execute_input(input);
-		
 	}
 }
 
