@@ -1,0 +1,2 @@
+gcc -o socketsClients.o socketsClient.c ../../common/client.c
+gcc -o socketsServer.o socketsServer.c ../../common/server.c ../../common/dbAccess/dbAccess.c

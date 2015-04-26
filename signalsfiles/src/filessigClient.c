@@ -17,7 +17,6 @@ void initialize(){
 	req.clientpid=(long)getpid();
 	sprintf(clientFile,CLIENT_FILE_PATH,(long)getpid());
 	sigemptyset(&sig.sa_mask);
-
     sig.sa_flags = 0;
     sig.sa_handler = user2_handler;
 	sigaction(SIGUSR2, &sig,0);
@@ -29,6 +28,36 @@ get_movies(){
     req.ac=GET_MOVIES;
     communicate_with_server();
     return resp.list;
+}
+
+void
+sig_usr2_handler(int s){
+    sigset_t sigset;
+    sigemptyset(&sigset);
+    sigaddset(&sigset,SIGUSR1);
+    sigaddset(&sigset,SIGUSR2);
+
+	if(sigprocmask(SIG_BLOCK,&sigset, NULL)==-1){
+		write(0,"Couldn't block signals",22);
+		return;
+	}
+
+    FILE * file = fopen(clientFile, "rb");
+    if(file == NULL){
+    	write(0,"Couldn't open file",18);
+		return;
+    }
+    if(fread(&resp, sizeof(Response), 1, file) == -1){
+    	write(0,"Couldn't read file",18);
+		return;
+    }
+
+    fclose(file);
+
+    if( sigprocmask(SIG_UNBLOCK, &sigset, NULL) == -1 ){
+        write(0,"Couldn't unblock signals",24);
+		return;
+    }
 }
 
 int

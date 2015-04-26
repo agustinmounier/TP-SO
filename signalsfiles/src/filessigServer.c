@@ -48,16 +48,17 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 	switch(fork()){
 		case -1: {
 				write(0, "Unable to fork process",22);
-				return;
+				break;
 				 }
 		case 0: {
 				dealWithClient(info->si_pid);
+				break;
 		}
 		default: {
 			if(sigprocmask(SIG_UNBLOCK,&sigset, NULL)==-1){
 				write(0,"Couln't unblock signals",24);
-				return;
 			}
+			break;
 		}		
 	}
 }
