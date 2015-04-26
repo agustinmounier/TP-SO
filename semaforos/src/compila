@@ -1,0 +1,2 @@
+gcc -o semshmClient.o clientback.c ../../common/client.c ../../common/ipc.h
+gcc -o semshmServer.o semshmServer.c ../../common/server.c ../../common/dbAccess/dbAccess.c

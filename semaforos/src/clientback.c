@@ -21,16 +21,16 @@ void onSigInt(int sig){
 }
 
 List_Movies get_movies(){
-    req.ac=SHOW_MOVIES;
+    req.ac=GET_MOVIES;
     communicate_with_server();
     return resp.list;
 }
 
 int get_seats(char * id, char * times){
     enter(1);
-    req->action=CHECK_SEATS;
-    req->movieID=id;
-    req->times=times;
+    req->ac=CHECK_SEATS;
+    strcpy(req.times,times);
+    strcpy(req.movieID,id);
     leave(2);
     enter(3);
     memcpy(resp, req, sizeof(Response));
@@ -40,9 +40,9 @@ int get_seats(char * id, char * times){
 
 void reserve_seats(char * id, char * times, int n){
     enter(1);
-    req->action=RESERVE_SEAT;
-    req->movieID=id;
-    req->times=times;
+    req->ac=RESERVE_SEAT;
+    strcpy(req.times,times);
+    strcpy(req.movieID,id);
     req->cant_seats=n;
     leave(2);
     enter(3);

@@ -15,14 +15,18 @@ executeRequest(Request r, Response * response){
         case GET_MOVIES:{
         	response->list = get_movies();
         	break;
-        case RESERVE_SEAT:
+        }
+        case RESERVE_SEAT:{
         	reserve_seat(r.movieID, r.times, r.cant_seats);
         	break;
-        case GET_TIMES:
+        }
+        case GET_TIMES:{
         	get_times(r.movieTimes);
         	break;
-        default:
+        }
+        default:{
         	printf("Invalid action.\n");
+        }
 
     }
 }

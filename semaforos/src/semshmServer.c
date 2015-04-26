@@ -1,10 +1,10 @@
 #include <errno.h>
+#include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include "../../common/ipc.h"
 #include "../../common/common.h"
-#include "../../common/dbAccess.h"
 #include "mutual.h"
 
 int main(void){
@@ -12,7 +12,7 @@ int main(void){
 	Response *resp;
 	FILE *file = fopen("/tmp/semshm", "wb");
 	if( file == NULL ){
-		fatal("fopen");
+		printf("Imposible crear memoria compartida");
 	}
 	fclose(file);
 	req = (Request *)getmem();
@@ -22,7 +22,7 @@ int main(void){
 	signal(SIGINT, onSigInt);
 	for(;;){
 		enter(2);
-		printf("movie code %d",req->movieID);
+		printf("movie code %d",atoi(req->movieID));
 		executeRequest(*req, resp);
 		leave(3);
 	}
