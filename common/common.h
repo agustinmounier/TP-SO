@@ -14,4 +14,6 @@ int getCantMovies();
 
 void show_seats(char * movie, char * time);
 
+void initialize();
+
 #endif

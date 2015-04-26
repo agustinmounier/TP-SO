@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include "../../common/ipc.h"
 #include "../../common/common.h"
 #include "filessig.h"
@@ -10,7 +12,7 @@ static Response resp;
 struct sigaction sig;
 
 
-void main(){
+int main(){
 	long pid = (long)getpid();
 	FILE* file= fopen(SERVER_PID_FILE, "wb");
 
@@ -39,7 +41,7 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset,SIGUSR1);
-	if(sigpromask(SIG_BLOCK,&sigset, NULL)==-1){
+	if(sigprocmask(SIG_BLOCK,&sigset, NULL)==-1){
 		write(0,"Couln't block signals",22);
 		return;
 	}
@@ -52,7 +54,7 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 				dealWithClient(info->si_pid);
 		}
 		default: {
-			if(sigpromask(SIG_UNBLOCK,&sigset, NULL)==-1){
+			if(sigprocmask(SIG_UNBLOCK,&sigset, NULL)==-1){
 				write(0,"Couln't unblock signals",24);
 				return;
 			}
@@ -71,7 +73,7 @@ readClientMessage(unsigned long pid){
 	Response resp;
 	char clientFile[40];
 	sprintf(clientFile,CLIENT_FILE_PATH,pid);
-	File* file= fopen(clientFile, "rb");
+	FILE* file= fopen(clientFile, "rb");
 	if(file==NULL){
 		printf("%s\n","Unable to open file from client");
 		return;
@@ -80,14 +82,14 @@ readClientMessage(unsigned long pid){
 		printf("%s\n","Unable to read file" );
 		return;
 	}
-	fclose();
-	excecuteRequest(req,res);
-	File* file= fopen(clientFile, "rb");
+	fclose(file);
+	executeRequest(req,&resp);
+	file= fopen(clientFile, "rb");
 	if(file==NULL){
 		printf("%s\n","Unable to open file from client");
 		return;
 	}
-	if(fwrite(&resp,sizeof(Reponse),1,file)==0){
+	if(fwrite(&resp,sizeof(Response),1,file)==0){
 		printf("%s\n","Unable to read file" );
 		return;
 	}

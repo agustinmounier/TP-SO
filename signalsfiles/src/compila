@@ -1,0 +1,2 @@
+gcc -o filessigClient.o filessigClient.c ../../common/client.c
+gcc -o filessigServer.o filessigServer.c ../../common/server.c ../../common/dbAccess/dbAccess.c 

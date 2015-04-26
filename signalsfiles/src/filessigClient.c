@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include "../../common/ipc.h"
 #include "../../common/common.h"
 #include "filessig.h"
@@ -9,17 +11,22 @@
 static Request req;
 static Response resp;
 static char clientFile[40];
+static struct sigaction sig;
 
 void initialize(){
-	req.clientpid=getpid();
+	req.clientpid=(long)getpid();
 	sprintf(clientFile,CLIENT_FILE_PATH,(long)getpid());
-	sigaction(SIGUSR2, user2_handler,0);
+	sigemptyset(&sig.sa_mask);
+
+    sig.sa_flags = 0;
+    sig.sa_handler = user2_handler;
+	sigaction(SIGUSR2, &sig,0);
 	//signal(SIGINT, onSigInt);
 }
 
 List_Movies
 get_movies(){
-    req.ac=SHOW_MOVIES;
+    req.ac=GET_MOVIES;
     communicate_with_server();
     return resp.list;
 }

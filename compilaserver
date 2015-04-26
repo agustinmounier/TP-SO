@@ -1,1 +1,0 @@
-gcc ./common/dbAccess/dbAccess.c ./common/servercommon.c ./signalsfiles/src/server.c
