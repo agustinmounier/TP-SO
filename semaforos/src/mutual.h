@@ -18,6 +18,7 @@
 void * getmem(void);
 
 void initsemaphores(void);
+
 /*
  * SIGINT handler
  */
@@ -34,6 +35,7 @@ void terminateClient(void);
 void terminateServer(void);
 
 void enter(int sem_num);
+
 void leave(int sem_num);
 
 #endif
