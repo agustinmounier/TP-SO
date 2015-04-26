@@ -33,9 +33,12 @@ getMovies(){
 
 void
 getTimes(char times[5][5]){
+	int i=0;
 	req.ac=GET_TIMES;
 	communicate_with_server();
 	pause();
+	for(; i < 5; i++)
+        strcpy(times[i], resp.movieTimes[i]);
 	return;
 }
 
