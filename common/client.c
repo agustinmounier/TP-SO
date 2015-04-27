@@ -64,7 +64,6 @@ execute_input(char * input){
 			return;
 		}
 		reserveSeat(id,times,cant);
-		printf("%s\n%s\n", "The reservation has been succesfully made.", "Enjoy your movie!");
 		return;
 	}
 	if(strcmp(cmd, "CheckSeats")==0){
