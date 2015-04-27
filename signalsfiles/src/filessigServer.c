@@ -44,10 +44,10 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset,SIGUSR1);
-	/*if(sigprocmask(SIG_BLOCK,&sigset, NULL)==-1){
+	if(sigprocmask(SIG_BLOCK,&sigset, NULL)==-1){
 		write(0,"Couln't block signals",22);
 		return;
-	}*/
+	}
 	switch(fork()){
 		case -1: {
 				write(0, "Unable to fork process",22);
@@ -78,14 +78,16 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 		DIR *dirp;
 		FILE *file;
 		struct dirent *direntp;
+		char* name;
 		if((dirp = opendir(CA_PATH)) == NULL){
 			exit(-1);
 		}
 		while((direntp =readdir(dirp))!=NULL && direntp->d_name[0] == '.'){
 		}
+		strcpy(name,direntp->d_name);
 		strcpy(clientFile, CA_PATH);
 		strcat(clientFile,"/");
-		strcat(clientFile, direntp->d_name);
+		strcat(clientFile, name);
 		file=fopen(clientFile,"rb+");
 		if(file == NULL){
 			printf("Error while opening %s file\n",clientFile);
@@ -100,10 +102,11 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 			printf("Error while removing %s file\n",clientFile);
 			exit(EXIT_FAILURE);
 		}
+		closedir(dirp);
 		executeRequest(req,&resp);
 		strcpy(clientFile, SA_PATH);
 		strcat(clientFile,"/");
-		strcat(clientFile, direntp->d_name);
+		strcat(clientFile, name);
 		file=fopen(clientFile, "wb+");
 		if(file==NULL){
 			printf("%s\n","Unable to open file from client");
@@ -114,7 +117,7 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 			return;
 		}
 		fclose(file);
-		kill(atoi(direntp->d_name), SIGUSR2);
+		kill(atoi(name), SIGUSR2);
 }
 
 void 
