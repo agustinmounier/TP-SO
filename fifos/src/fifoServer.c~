@@ -23,7 +23,7 @@ main(void){
 	printf("Server running...\n");
 	while(1){
 
-	if(read(server_fd, &req, sizeof(Request)) != sizeof(Request))
+		if(read(server_fd, &req, sizeof(Request)) != sizeof(Request))
             continue;
 
         snprintf(fifoPath, FIFO_PATH_LENGTH, FIFO_CLIENT_PATH,

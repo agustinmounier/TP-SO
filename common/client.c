@@ -59,8 +59,12 @@ execute_input(char * input){
 			printf("%s\n","Not valid arguments" );
 			return;
 		}
+		if(getSeats(id, times) < cant){
+			printf("The are not enough seats available.\n", cant);
+			return;
+		}
 		reserveSeat(id,times,cant);
-		printf("%s\n%s\n", "The reserve has been succesfully made.", "Enjoy your movie!");
+		printf("%s\n%s\n", "The reservation has been succesfully made.", "Enjoy your movie!");
 		return;
 	}
 	if(strcmp(cmd, "CheckSeats")==0){
