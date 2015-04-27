@@ -1,72 +1,113 @@
-#include <arpa/inet.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
+#include <netdb.h>
+#include <signal.h>
 #include "../../common/ipc.h"
 #include "sockets.h"
 
-static Request req;
-static Response resp;
-static char serverip[14];
+#define PORT 3550         
 
-void
-initializeClient(){
-    printf("Insert server IP to connect: ");
-    scanf("%s", serverip);
+int fd;       
+Response response;
+Request request;  
+struct hostent *he;         
+struct sockaddr_in server;  
+char server_ip[16];
+
+struct in_addr ipv4addr;
+
+
+int
+initialize(void) {
+   char c;
+   printf("Server ip address: ");
+   fflush(stdout);
+
+   scanf("%s", server_ip);
+   while((c = getchar()) != '\n' && c != EOF);
+
+   inet_pton(AF_INET, server_ip, &ipv4addr);
+
+   if ((he=gethostbyaddr(&ipv4addr, sizeof(ipv4addr), AF_INET))==NULL){       
+      printf("gethostbyaddr() error\n");
+      exit(-1);
+   }
+
+   server.sin_family = AF_INET;
+   server.sin_port = htons(PORT); 
+   server.sin_addr = *((struct in_addr *)he->h_addr);  
+   bzero(&(server.sin_zero),8); 
+
 }
 
 void
-communicate_with_server(void){
-    struct sockaddr_in addr;
-    int fd;
-    memset(&addr, 0, sizeof(struct sockaddr_in));
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(PORT);
-    inet_pton(AF_INET, serverip, &(addr.sin_addr));
-    if((fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-        printf("%s\n","Unable to create a socket" );
-        return;
-    if(connect(fd, (struct sockaddr *) &addr, sizeof(struct sockaddr_in)) == -1)
-        printf("%s\n","Unable to connect" );
-        return;
-    if(write(fd, &req, sizeof(Request)) != sizeof(Request))
-        printf("%s\n","Couldn't write Request in socket" );
-        return;
-    if(read(fd, &resp, sizeof(Response)) != sizeof(Response))
-        printf("%s\n","Couldn't read response from server" );
-        return;
+sendRequest(void){
 
-    if(close(fd) == -1){
-        printf("Error closing socket");
-    }
-    return;
+   if ((fd=socket(AF_INET, SOCK_STREAM, 0))==-1){  
+      printf("socket() error\n");
+      exit(-1);
+   }
+
+   if(connect(fd, (struct sockaddr *)&server,
+      sizeof(struct sockaddr))==-1){ 
+      printf("connect() error\n");
+      exit(-1);
+   }
+
+   if(send(fd, &request, sizeof(request), 0) == -1){
+      printf("Error en send() \n");
+      exit(-1);
+   }
+
+   if ((recv(fd, &response, sizeof(Response), 0)) == -1){  
+      printf("Error en recv() \n");
+      exit(-1);
+   }
+
+   close(fd);  
+
 }
 
 int
-get_seats(char * id, char * times){
-    req.ac=CHECK_SEATS;
-    strcpy(req.times,times);
-    strcpy(req.movieID,id);
-    communicate_with_server();
-    return resp.value;
-}
+getSeats(char * movieId, char * movieTime){
 
-
-void
-reserve_seats(char * id, char * times,int n){
-    req.ac=RESERVE_SEAT;
-    strcpy(req.times,times);
-    strcpy(req.movieID,id);
-    req.cant_seats=n;
-    communicate_with_server();
-    return ;
+   request.ac = CHECK_SEATS;
+   strcpy(request.movieID, movieId);
+   strcpy(request.times, movieTime);
+   sendRequest();
+   return response.value;
 }
 
 List_Movies
-get_movies(){
-    req.ac=GET_MOVIES;
-    communicate_with_server();
-    return resp.list;
+getMovies(void){
+    request.ac = GET_MOVIES;
+    sendRequest();
+    return response.list;
 }
+
+void
+getTimes(char times[5][5]){
+    int i = 0;
+    request.ac = GET_TIMES;
+    sendRequest();
+    for(; i < 5; i++)
+        strcpy(times[i], response.movieTimes[i]);
+
+}
+
+void
+reserveSeat(char* id, char* time, int n){
+    request.ac = RESERVE_SEAT;
+    strcpy(request.movieID, id);
+    strcpy(request.times, time);
+    request.cant_seats = n;
+    sendRequest();
+}
+
+

@@ -13,7 +13,7 @@ struct sigaction sig;
 
 
 int main(){
-	long pid = (long)getpid();
+	unsigned long pid = (unsigned long)getpid();
 	printf("%s", "The server is running...");
 	FILE* file= fopen(SERVER_PID_FILE, "wb");
 
@@ -21,7 +21,7 @@ int main(){
 		printf("%s\n","The server file couldn't be opened.");
 		return -1;
 	}
-	if(fwrite(&pid, sizeof(long), 1, file)==0){
+	if(fwrite(&pid, sizeof(unsigned long), 1, file)==0){
 		printf("%s\n", "Not able to write the server pid.");
 		return -1;
 	}
@@ -43,6 +43,7 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset,SIGUSR1);
+	printf("fdsafdsa\n");
 	if(sigprocmask(SIG_BLOCK,&sigset, NULL)==-1){
 		write(0,"Couln't block signals",22);
 		return;
@@ -53,6 +54,8 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 				break;
 				 }
 		case 0: {
+				printf("case 0\n");
+				printf("%d\n", info->si_pid);
 				dealWithClient(info->si_pid);
 				break;
 		}
@@ -77,6 +80,8 @@ readClientMessage(unsigned long pid){
 	Response resp;
 	char clientFile[40];
 	sprintf(clientFile,CLIENT_FILE_PATH,pid);
+	printf("%s\n", clientFile);
+	printf("%d\n", pid);
 	FILE* file= fopen(clientFile, "rb+");
 	if(file==NULL){
 		printf("%s\n","Unable to open file from client");

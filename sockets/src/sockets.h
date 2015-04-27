@@ -1,8 +1,11 @@
 #ifndef _sockets_
 #define _sockets_
-#define PORT 3550 
 
-void communicate_with_server();
-void dealWithClient();
+int initialize(void);
+void sendRequest(void);
+int getSeats(char * movieId, char * movieTime);
+List_Movies getMovies(void);
+void getTimes(char times[5][5]);
+void reserveSeat(char* id, char* time, int n);
 
 #endif

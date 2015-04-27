@@ -4,67 +4,75 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/types.h>
-#include <string.h>
-#include <sys/socket.h>
 #include <sys/stat.h>
-#include <sys/types.h>
+#include <netdb.h>
 #include <unistd.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <signal.h>
 #include "../../common/ipc.h"
-#include "sockets.h"
 
-int
-main(void){
-    int fd, fd2;
-   	struct sockaddr_in server; 
-   	struct sockaddr_in client; 
-  	int sin_size;
-   	if ((fd=socket(AF_INET, SOCK_STREAM, 0)) == -1 ) {  
-      	printf("Not able to open a new Socket. Try again later.\n");
-		return -1;
-   	}
-   	server.sin_family = AF_INET;  
-   	server.sin_port = htons(PORT);
-   	server.sin_addr.s_addr = INADDR_ANY;bzero(&(server.sin_zero),8);
-   	if(bind(fd,(struct sockaddr*)&server,sizeof(struct sockaddr))==-1) {
-      	printf("Unable to do the binding. \n");
-        exit(-1);
-    }     
-    printf("Unable to complete the listen.\n");
+#define PORT 3550 
+#define BACKLOG 50 
+
+int fd, fd2; 
+Request req;
+Response resp;
+void onSigInt(int sig);
+
+
+int 
+main() {
+
+   struct sockaddr_in server; 
+   struct sockaddr_in client; 
+   int sin_size;
+
+   if ((fd=socket(AF_INET, SOCK_STREAM, 0)) == -1 ) {  
+      printf("error when creating socket\n");
       exit(-1);
+   }
 
-   	while(1){
-      sin_size=sizeof(struct sockaddr_in);
-       if ((fd2 = accept(fd,(struct sockaddr *)&client,&sin_size))==-1) {
-         printf("error en accept()\n");
+   server.sin_family = AF_INET;         
+   server.sin_port = htons(PORT); 
+   server.sin_addr.s_addr = INADDR_ANY; 
+   bzero(&(server.sin_zero),8); 
+
+
+   if(bind(fd,(struct sockaddr*)&server,
+           sizeof(struct sockaddr))==-1) {
+      printf("error in bind() \n");
+      exit(-1);
+   }     
+
+   if(listen(fd,BACKLOG) == -1) {  
+      printf("error in listen()\n");
+      exit(-1);
+   }
+
+   signal(SIGINT, onSigInt);
+
+   while(1) {
+      sin_size = sizeof(struct sockaddr_in);
+      if ((fd2 = accept(fd,(struct sockaddr *)&client,
+                        &sin_size))==-1) {
+         printf("error in accept()\n");
          exit(-1);
       }
-      switch(fork()){
-        case -1: 
-          printf("%s\n", "Couldn't create child to attend client." );
-          break;
-        case 0:
-          dealWithClient(fd2);
-          break;
-        default:
-          close(fd2);
-          break;
-      }
-        
+      recv(fd2, &req, sizeof(Request), 0);
+      executeRequest(req, &resp);
+      send(fd2, &resp, sizeof(resp), 0); 
+      close(fd2);
    }
 }
 
 void
-dealWithClient(int fd){
-    Request req;
-    Response resp;
-    if(readn(fd, &req, sizeof(Request)) != sizeof(Request)) {
-            close(fd);
-            return;
-    }
-    executeRequest(req, &resp);
-    if (writen(fd, &resp, sizeof(Response)) != sizeof(Response))
-          printf("%s\n","Couldn't write Response" );
-
-    if(close(fd) == -1) /* Close connection */
-            printf("Couldn't close Socket\n");
+onSigInt(int sig){
+    int exit_status = EXIT_SUCCESS;
+    if( fd != -1 && close(fd) != 0 ) 
+      exit_status = EXIT_FAILURE;
+    if( fd2 != -1 && close(fd2) != 0 ) 
+      exit_status = EXIT_FAILURE;
+    exit(exit_status);
 }

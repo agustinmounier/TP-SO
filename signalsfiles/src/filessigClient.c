@@ -13,9 +13,10 @@ static Response resp;
 static char clientFile[40];
 static struct sigaction sig;
 
-void initialize(){
-	req.clientpid=(long)getpid();
-	sprintf(clientFile,CLIENT_FILE_PATH,(long)getpid());
+void initialize(void){
+	req.clientpid=(unsigned long)getpid();
+	printf("client pid %d\n", getpid());
+	sprintf(clientFile,CLIENT_FILE_PATH,(unsigned long)getpid());
 	sigemptyset(&sig.sa_mask);
     sig.sa_flags = 0;
     sig.sa_handler = user2_handler;
@@ -24,7 +25,7 @@ void initialize(){
 }
 
 List_Movies
-getMovies(){
+getMovies(void){
     req.ac=GET_MOVIES;
     communicate_with_server();
     pause();
@@ -103,7 +104,7 @@ reserveSeat(char * id, char * times,int n){
 }
 
 void
-create_request(){
+create_request(void){
 	FILE *file=fopen(clientFile,"wb+");
 	if(file==NULL){
 		printf("Not able to create file.");
@@ -117,7 +118,7 @@ create_request(){
 }
 
 void 
-notify_server(){
+notify_server(void){
 	FILE *file=fopen(SERVER_PID_FILE,"rb+");
 	unsigned long pid_s;
 	if(file==NULL){
@@ -134,7 +135,7 @@ notify_server(){
 }
 
 void
-communicate_with_server(){
+communicate_with_server(void){
 	create_request();
 	notify_server();
 }
