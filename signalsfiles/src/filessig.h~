@@ -4,7 +4,7 @@
 #define CLIENT_FILE_PATH "../tmp/ca/%ld"
 #define SERVER_FILE_PATH "../tmp/sa/%ld"
 #define CA_PATH "../tmp/ca"
-#define SA_PATH "../tmp/sa"
+#define CA_PATH "../tmp/sa"
 #define CA_PATH_LENGTH  9
 #define SERVER_PID_FILE "./server_pid"
 

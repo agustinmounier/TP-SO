@@ -27,6 +27,7 @@ getMovies(){
     req.ac=GET_MOVIES;
     communicate_with_server();
     pause();
+	write(0,"Couldn't read file",18);
     return resp.list;
 }
 

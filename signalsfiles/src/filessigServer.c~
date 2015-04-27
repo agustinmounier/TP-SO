@@ -44,10 +44,10 @@ user1_handler(int sig, siginfo_t *info, void *ptr){
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset,SIGUSR1);
-	/*if(sigprocmask(SIG_BLOCK,&sigset, NULL)==-1){
+	if(sigprocmask(SIG_BLOCK,&sigset, NULL)==-1){
 		write(0,"Couln't block signals",22);
 		return;
-	}*/
+	}
 	switch(fork()){
 		case -1: {
 				write(0, "Unable to fork process",22);
